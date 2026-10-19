@@ -1,0 +1,22 @@
+# 对照区四对（锁定，换行须 overrides + 月度复核）
+pairs:
+  - region: 粤西区
+    control: 粤东区
+  - region: 华东区
+    control: 长沙区
+  - region: 成都区
+    control: 重庆区
+  - region: 武汉区
+    control: 郑州区
+
+# 份额小：升级也只进 CEO 附列
+share_small_regions:
+  - 合肥区
+  - 南京区
+  - 天津区
+  - 西安区
+
+# 澳门不立案；香港可进主清单
+exclude_regions:
+  - 澳门区
+  - 澳门

@@ -1,0 +1,133 @@
+# v3.1 初值。下面的数不改。公司短清单顺序在落地方案 §5.3，不在这个文件里。
+version: "4.0"
+
+compare:
+  daily_primary: same_weekday_364
+  daily_reference: [same_date_yoy, wow_7d]
+  monthly_primary: yoy_month
+  monthly_reference: [mom_month]
+
+entry_shortlist:
+  e1_enabled: true
+
+# v4.0 拍板（2026-10-16）：CEO 与全角色同一诊断标准；CEO 视图 = 全国月频问题按贡献累加至 80%。
+# 实现：`engine/rank.py` + run_batch 读取本块；未实现前仍回退 pick_entry_shortlist。
+ceo_view:
+  mode: national_contribution_fold
+  cadence: 月
+  fold: 0.80
+
+# CFO：净利/毛利入口优先的 80% 切片（B2-2）
+cfo_view:
+  enabled: true
+  cadence: 月
+  fold: 0.80
+  e1_weight_boost: 1.25
+  e2_weight_boost: 1.1
+  e3_weight_boost: 1.05
+
+contribution_method: lmdi
+
+recon:
+  # 神策 paid_amt vs 店级大分类月销（判据/KPI 仍用宽表）；2026-10-19 产品拍板
+  category_tol: 0.15
+  # 中类 Hive↔神策交叉验登记门（不写 CEO 榜）；采纳推荐包
+  mid_category_tol: 0.20
+  mid_category_top_n: 20
+  # 对账第二轨：Hive first_category 汇总，仅审计 CSV，不替换宽表 KPI
+  hive_sensors_audit: true
+
+new_store_max_open_days: 90
+new_store_traffic_start_open_day: 4  # 开业第4天起算客流
+
+new_store_traffic:
+  qualified_ratio_suggest: 0.90
+  qualified_ratio_alt: 1.00
+  fallback_region_ratio: 0.85
+  fallback_city_ratio: 0.70
+  upgrade_unmet_share: 0.50
+
+store_strong_hint_yoy: -0.10
+region_yoy_hint: 0.0
+achievement_hint: 0.90
+rolling_forecast_pp: -3
+
+direct_gross_margin_gap_pp: 3
+
+arpu_low_vs_national: 0.80
+
+bad_rate_yoy_pp: 3
+bad_rate_abs: 0.20
+
+category_decline_share: 0.70
+pork_minus_veg_price_pp: 30
+fruit_active_sku: 15
+untyped_share_block: 0.15
+
+a_price_store_share: 0.20
+
+daily_scan:
+  yoy_strong: -0.10
+  profit_negative_locked: true
+  # 日扫提示与月度共用触发编号，用 cadence 区分。促销不进日扫。
+  hint_triggers: [T1, T3, T4, T14, T15]
+  promo_in_daily: false
+  open_region_layer: true
+  # v4.0 拍板：店级日扫与月频「同一套叶子不等式」，对比基准仍为定比 364；数据为店×自然日实数（宽表 store 行），非月聚合。
+  # 实现：v4.0-core 开启；当前 false 保持 v3.3 回放可比。
+  open_store_layer: true
+  store_same_rules_as_monthly: true
+  # 2026-10-15 本机查询：店级整店行 2026-10-01 至 2026-10-14 共 42833 行，最大日期 2026-10-14。按 T+1 日记，不记钟点。
+  delay_checked: true
+
+# 补贴前毛利率 = 补贴前毛利额 / 销售额（与 T13、T1 同一对店日加权和）。
+# 百分点起报线未用 9 月波动校准，保持 null，不另造门槛。
+gross_margin_before_subsidy:
+  rate_floor_pp: null
+
+# 与 T2 达成档同为 90%。目标表已有店日均订购额，但只覆盖粤西运营大区，且未与实际额对齐。false = 不计算达标。
+order_attain:
+  enabled: false
+  threshold: 0.90
+  target_table: operation_center_region_target_mi
+
+sales_weight_attain:
+  enabled: false
+  threshold: 0.90
+
+# 滞销「连续无销售天数」。9 月 SKU 量级未看，null 表示不触发。
+stale_sku_days: null
+
+repurchase:
+  enabled: false
+
+# B1-5：新老客客单价窗口未拍板前只登记空缺行（engine/promo_consumer.py）
+b2a_new_old_customer:
+  enabled: false
+  window_days: 90
+  company_entry: false
+  note: 近90天购≥2次=老客；本期仅登记【估算】，不升公司入口
+
+# B1-9：被动促销无直接指标，禁止总折扣减主动额轧差
+m1b_passive:
+  status: 估算
+  mode: rate_minus_active
+  passive_rate_floor: 0.03
+  note: 宽表 promo 率与 shop_promotion_amt 同窗分解；Hive 维表本期不阻塞跑批
+
+# 累计贡献达到该比例之后的条目只打 fold 标记，不从清单删除。
+contribution_fold: 0.80
+supervisor_pin_periods: 2
+
+wallet_arpu_yoy_lock_negative: true
+
+block_dual_achievement: true
+
+# 区域税前/滚测：ADS 无真源时读 CSV（见 data/问题引擎/区域税前利润指标_*）
+finance_metrics:
+  enabled: true
+  primary_file: 区域税前利润指标_202509.csv
+  fallback_file: 区域税前利润指标_202509_回放用例.csv
+  allowed_sources:
+    - finance_bp_verified
+    - engine_doc_replay_v18

@@ -1,0 +1,25 @@
+# 店号互映（采纳推荐包 2026-10-19）
+version: "20261019"
+
+authoritative_table: default_catalog.ads_business_analysis.operation_center_dim_store_profile_di
+authoritative_snapshot: report_date = 统计月末（如 2026-09-30）
+filters:
+  - sp_level = '1'
+  - manage_area_name 剔除香港、澳门
+
+keys:
+  engine_store_id: sp_store_id
+  engine_join: "TRIM(UPPER(sp_store_id))"
+  sensors_primary: sap_shop_id
+  sensors_fallback: shop_id
+  sensors_coalesce: "COALESCE(sap_shop_id, shop_id)"
+  hive_fl_store_id: store_id
+  # 宽表 V2 常见 SAP 店编列；与维表 new_sp_store_id / sap 列互映以月末快照为准
+  wide_sap_column: sap_store_id
+
+join_rules:
+  - "神策 store_key 先与维表 SAP/店编列匹配，失败再试 shop_id ↔ sp_store_id（仅审计样本，不默认相等）"
+  - "Hive fl.store_id 与维表 sp_store_id 匹配；互映失败店整店剔除对账样本"
+  - "禁止店名 JOIN"
+
+regions_config: 问题引擎/config/regions.yaml

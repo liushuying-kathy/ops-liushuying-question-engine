@@ -1,0 +1,50 @@
+# 五层区域映射（v3.0）
+# 本文件不抄门店清单。权威来源是 ADS 维表当日快照，不是事后改过的组织树。
+# 近一年划分是否调整：本机未做历史对照。同比下钻必须用统计月末的维表快照
+# （2026-09 用 2026-09-30，2025-09 用 2025-09-30），不得用本期组织替换去年店归属。
+# 运营大区业务字段：sap_area_name（2026-09-30 粤西与 area_description 同值）。不要用 area2_name。
+
+version: "3.0"
+source:
+  table: default_catalog.ads_business_analysis.operation_center_dim_store_profile_di
+  snapshot_sql: sql/问题引擎/引擎_五层区域映射_维表快照.sql
+  grain: 店×日快照
+  effective_date_field: report_date
+  filters:
+    - sp_level = '1'
+    - manage_area_name 剔除香港、澳门
+  fields:
+    store_id: sp_store_id
+    city: city_description
+    province: pro_description
+    opera_region: sap_area_name
+    manage_area: manage_area_name
+
+# 已有月度下钻表（销售、19点前来客）。重量与毛利列写入 SQL 后，重取数才可用。
+opera_kpi_sql: sql/问题引擎/引擎_运营大区月KPI_202509同比.sql
+opera_kpi_csv: data/问题引擎/运营大区月KPI_202509同比.csv
+
+levels:
+  - id: manage_area
+    label: 管理区
+    ceo_upgrade: true
+    triggers: [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15]
+    compare_to: pairs.yaml
+  - id: opera_region
+    label: 运营大区
+    ceo_upgrade: false
+    triggers_ready: [T1, T3]
+    triggers_pending_refetch: [T4, T13]
+    triggers_pending_table: [T14]
+    compare_to: parent_manage_area
+    rule: 同比 < 0 且表现弱于其上一级管理区。只描述，不升级，不进公司主清单。
+  - id: province
+    label: 省份
+    ceo_upgrade: false
+    triggers_ready: []
+    note: 维表有 pro_description。未导出省×月 KPI 之前不发省层提示。
+  - id: city
+    label: 城市
+    ceo_upgrade: false
+    triggers_ready: []
+    note: 维表有 city_description，店月 KPI 已带城市名，但没有城市×月对照表。未导出前不发城市层提示。小区编号仍沿用区域会原文，挂在城市层之下，不另造编号。

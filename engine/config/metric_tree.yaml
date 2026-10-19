@@ -1,0 +1,85 @@
+# 钱大妈经营指标树（B0-1）— 与落地方案 §3 过程树对齐；叶子实现状态见附录 C / BUILD 计划
+version: "1.0"
+entries:
+  - id: E1
+    label: 店日均考核净利润
+    layer: entry
+    cadence: [月]
+  - id: E2
+    label: 店日均补贴前毛利额
+    layer: entry
+    cadence: [月, 日]
+  - id: E3
+    label: 补贴前毛利率
+    layer: entry
+    cadence: [月, 日]
+locate:
+  - id: manage_area
+    label: 管理区域
+  - id: sap_area
+    label: 运营大区
+  - id: province_city
+    label: 省/市
+  - id: store_cell
+    label: 店型四格
+process:
+  order:
+    - id: O1
+      label: 订购金额达标
+      status: partial
+    - id: O2
+      label: 订购重量
+      status: live
+  sale:
+    - id: S1
+      label: 店日均销售额
+      status: live
+    - id: S2
+      label: 销售重量
+      status: live
+  split:
+    - id: B1
+      label: 19点前来客
+      status: live
+    - id: B2
+      label: 19点前客单价
+      status: partial
+    - id: B2a
+      label: 新老客客单价
+      status: blocked
+  promo:
+    - id: M1a
+      label: 主动促销
+      status: partial
+    - id: M1b
+      label: 被动促销
+      status: blocked
+    - id: M2
+      label: 时段折扣率
+      status: partial
+  consumer:
+    - id: B1a
+      label: 会员结构
+      status: partial
+    - id: C1a
+      label: 购买频次
+      status: partial
+    - id: C1b
+      label: 复购
+      status: blocked
+    - id: C1c
+      label: 购物篮
+      status: partial
+  category:
+    - id: T12
+      label: 大分类事实
+      status: live
+    - id: CAT_MID
+      label: 店级中分类
+      status: vacancy
+    - id: CAT_SUB
+      label: 店级小分类
+      status: vacancy
+    - id: CAT_SKU
+      label: SKU日销售下钻
+      status: vacancy

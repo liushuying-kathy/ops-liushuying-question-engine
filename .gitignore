@@ -1,0 +1,50 @@
+# 硬约束：office / 图片 / 展示页 / 压缩包 / 日志文本
+*.xlsx
+*.xls
+*.docx
+*.doc
+*.pptx
+*.ppt
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+*.bmp
+*.html
+*.htm
+*.zip
+*.7z
+*.rar
+*.log
+*.txt
+!requirements.txt
+
+# ps1 白名单
+*.ps1
+!engine/scripts/scheduled_run.ps1
+
+# 运行产物：只放行 samples
+engine/runs/**
+!engine/runs/samples/
+!engine/runs/samples/**
+**/problems.json
+**/report.json
+
+# 数据面：只放行小样
+engine/data/**
+!engine/data/fixtures/
+!engine/data/fixtures/**
+data/
+Hive_*.csv
+**/Hive_店日中级KPI_202509.csv
+
+# 密钥与运行态
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.venv/
+venv/

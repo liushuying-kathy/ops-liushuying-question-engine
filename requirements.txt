@@ -1,0 +1,7 @@
+# 草案【待核】：工程真源无 requirements.txt；由 engine/ 下 .py 的 import 归纳（2026-10-19），版本未锁定
+requests
+PyYAML
+# 外部依赖（非 PyPI，需另配路径）【待核】：
+#   grader_agent      ← 原 run_grader_agent.py / run_landing_grader_agent.py（已移出仓外 99-待清理）
+#   sensors_common    ← scripts/recon/*sensors*.py
+#   workspace_config  ← scripts/recon/*sensors*.py

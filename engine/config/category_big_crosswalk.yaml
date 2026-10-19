@@ -1,0 +1,78 @@
+# 大分类口径对照（神策 big_category ↔ 商分宽表 categoryName ↔ Hive first_category_name）
+# 真源说明见：问题引擎/数据真源与缺口确认单_20261019.md §3.4、docs/口径/运营相关指标口径说明.md（8 大类序）
+version: "20261019"
+
+# 商品/运营标准 8 大类（canonical，带「类」后缀与宽表一致）
+canonical_big:
+  - 蔬菜类
+  - 猪肉类
+  - 肉禽蛋类
+  - 水果类
+  - 水产类
+  - 冷藏及加工类
+  - 预制菜
+  - 标品类
+
+# 神策 payOrderDetail.big_category → canonical（展示、导出列 bdapp_big_category）
+sensors_big_to_canonical:
+  蔬菜类: 蔬菜类
+  猪肉类: 猪肉类
+  禽类: 肉禽蛋类
+  肉禽蛋类: 肉禽蛋类
+  水果类: 水果类
+  水产类: 水产类
+  冷藏及加工类: 冷藏及加工类
+  预制菜: 预制菜
+  标品类: 标品类
+  乳品: 冷藏及加工类
+  烘焙类: 冷藏及加工类
+  日用品: 标品类
+  能量类: 标品类
+  耗材类: 标品类
+  购物袋: 标品类
+  日常类: 标品类
+  虚拟商品: null
+  澳门专区: null
+
+# 商分店级大分类月销 categoryName → canonical（当前 9 月 CSV 无肉禽蛋类、标品类行）
+bdapp_big_to_canonical:
+  蔬菜类: 蔬菜类
+  猪肉类: 猪肉类
+  肉禽蛋类: 肉禽蛋类
+  水果类: 水果类
+  水产类: 水产类
+  冷藏及加工类: 冷藏及加工类
+  预制菜: 预制菜
+  标品类: 标品类
+
+# Hive dal_manage_full_link_store_dc_article_info_di.first_category_name → canonical
+hive_first_to_canonical:
+  蔬菜类: 蔬菜类
+  蔬菜: 蔬菜类
+  猪肉类: 猪肉类
+  猪肉: 猪肉类
+  肉禽蛋类: 肉禽蛋类
+  肉禽蛋: 肉禽蛋类
+  水果类: 水果类
+  水果: 水果类
+  水产类: 水产类
+  水产: 水产类
+  冷藏及加工类: 冷藏及加工类
+  冷藏及加工: 冷藏及加工类
+  预制菜: 预制菜
+  标品类: 标品类
+  标品: 标品类
+
+# 对账门专用：神策 canonical 再映射到「宽表对账键」（宽表 9 月仅 6 类且无肉禽蛋/标品独立行）
+recon:
+  wide_amount_field: saleAmt
+  wide_fallback_field: saleDayAvg_x_bizDays
+  sensors_amount_field: paid_amt
+  # 神策侧：肉禽蛋对账键由 aggregate 内「猪肉+禽 / 仅肉禽蛋」去重后落入猪肉类
+  sensors_canonical_to_wide_key:
+    标品类: 冷藏及加工类
+  meat_dedup: pork_plus_bird_else_lump
+  # 宽表侧：canonical 即键名（恒等）
+  exclude_manage_areas:
+    - 澳门区
+    - 香港区
