@@ -1,3 +1,5 @@
+> 本仓已归档。最新版本请见 [BAteam-core/ops-liushuying-question-engine](https://github.com/BAteam-core/ops-liushuying-question-engine)。
+
 # 经营问题引擎（草案 · 未 git init）
 
 仓名：`ops-liushuying-question-engine`（owner：liushuying-kathy；仓库地址：https://github.com/liushuying-kathy/ops-liushuying-question-engine）。**草案，未 git init / 未 commit / 未 push。**
