@@ -1,0 +1,21 @@
+{
+  "package": "ops-liushuying-question-engine-docs-and-demo-update-v2.2.1",
+  "as_of": "2026-11-02",
+  "package_type": "documentation_and_render_only_demo_overlay_not_full_repository",
+  "algorithm": "SHA256",
+  "self_entry": "excluded:self-referential",
+  "file_count": 11,
+  "files": {
+    ".cursor/skills/问题引擎-run/SKILL.md": "68844c68ff1180ab9edf76053bf37254d50905fbce34db448f9f87db8fcd0aa9",
+    ".gitignore": "8d9694f1e11114d2476495d4bc62f966286ae6ddc5c676cd21e3d3cbe59041b4",
+    "00-愿景与读序/门店经营诊断问题引擎_落地方案.md": "e725228832006851aa3b2d5d3a4b7d1adb5d0c0f3fa39b38b2a229c93baf9524",
+    "AGENTS.md": "ac3d64799f365e663e9ab4f8de699b78aeb7b3be85b109d68d6d7c4d9c0f2c03",
+    "HANDOFF.md": "6539bfb188067381fb0a5c2250e4f1c521ac8ceb7a5f1efcc0b8fa4663f992a7",
+    "README.md": "d237cf49ced1f64ae22c39c07bd4e9abf6553ddb7690605d0e6e741218054755",
+    "Shaun-coop/261019-经营问题引擎上Git整理.md": "f996ed9d6053d66797baafc17fd1950c771008c9e61da2f8bc53be87857c1e46",
+    "docs/releases/2026-11-02_上仓说明.md": "eed2cbf9bc16902a28abef49d0d1a71a7d28cc3ea238e166360ecefcfcb95fe5",
+    "engine/demo/QDM全真演示稿_中金咨询版_20261103.html": "44bea57bc7dd19ddaf459f4964e5d6fe3365081d92ecc68a358ccd4993d838ca",
+    "logs/2026-11-02.md": "9c1e469db352fe5611693952e02d967fcc607b2b370cb7a9b86bca421c5a4671",
+    "logs/2026-11-02/上仓对齐门槛_20261102.md": "e4338bc6360519c5fd306711497c2f37a3357edef662428640f35f143dcde632"
+  }
+}

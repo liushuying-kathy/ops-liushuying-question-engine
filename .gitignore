@@ -14,6 +14,8 @@
 *.bmp
 *.html
 *.htm
+# 唯一例外：经批准入库的 QDM 锁版评审样张；须保留 RENDER-ONLY 注释
+!engine/demo/QDM全真演示稿_*.html
 *.zip
 *.7z
 *.rar
